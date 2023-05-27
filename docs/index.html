@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SIMPLE GUI CALCULATOR</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
@@ -13,16 +13,16 @@
             color: white;
             max-width: 1500px;
         }
-		html body{
-			background-color: #3b3b3b;
-		}
+        html body {
+            background-color: #3b3b3b;
+        }
         .container {
             max-width: 350px;
             background-color: #222222;
             margin: 70px auto;
             padding: 20px;
-			border-radius: 10px;
-			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
         }
 
         #inputLabel {
@@ -32,9 +32,9 @@
             padding-right: 16px;
             padding-bottom: 10px;
             background-color: #101010;
-			border-radius: 10px;
+            border-radius: 10px;
             color: white;
-			margin: 10px;
+            margin: 10px;
         }
 
         #calcutTitle {
@@ -54,11 +54,11 @@
 
         .fa-backspace {
             max-width: 1px;
-			margin-left: -22px;
+            margin-left: -22px;
         }
-		.btn{
-			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-		}
+        .btn {
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
     </style>
 </head>
 <body>
@@ -100,58 +100,76 @@
     var inputLabel = document.getElementById('inputLabel');
 
     // Getting the value at each pushBtn 
-	function pushBtn(value) {
-		var pushed = value.innerHTML;
+    function pushBtn(value) {
+        var pushed = value.innerHTML;
 
-		// To evaluate the expression in label
-		if (pushed == "=") {
-			var expression = inputLabel.innerHTML.replace(/x/g, "*").replace(/÷/g, "/");
-			var result = eval(expression);
-			inputLabel.innerHTML = Number.isInteger(result) ? result : result.toFixed(2);
-		}
-		// Clearing label
-		else if (pushed == "C") {
-			inputLabel.innerHTML = '0';
-		}
-		// Clearing one character or each character	
-		else if (pushed == "<i class=\"fas fa-backspace\"></i>") {
-			var expression = inputLabel.innerHTML;
-			var lastChar = expression[expression.length - 1];
-			
-			if (lastChar == " ") {
-				inputLabel.innerHTML = expression.substring(0, expression.length - 3);
-			} else {
-				inputLabel.innerHTML = expression.substring(0, expression.length - 1);
-			}
-			
-			if (inputLabel.innerHTML.trim() == "") {
-				inputLabel.innerHTML = '0';
-			}
-		}
-		else if (inputLabel.innerHTML == "0" && pushed == "-"){
-			inputLabel.innerHTML = "-";
-		}
-		else if (inputLabel.innerHTML == "-" && pushed == "0"){
-			inputLabel.innerHTML = "0";
-		}
-		// Adding operators and preventing consecutive operators
-		else {
-			if (pushed == "x" || pushed == "÷" || pushed == "+" || pushed == "-") {
-				var lastChar = inputLabel.innerHTML.trim().slice(-1);
-				if (lastChar != "" && lastChar != "x" && lastChar != "÷" && lastChar != "+" && lastChar != "-") {
-					inputLabel.innerHTML += " " + pushed + " ";
-				}
-			} else {
-				if (inputLabel.innerHTML == "0" && pushed == "-") {
-					inputLabel.innerHTML = "-";
-				} else if (inputLabel.innerHTML == "0") {
-					inputLabel.innerHTML = pushed;
-				} else {
-					inputLabel.innerHTML += pushed;
-				}
-			}
-		}
-	}
+        // To evaluate the expression in label
+        if (pushed == "=") {
+            var expression = inputLabel.innerHTML.replace(/x/g, "*").replace(/÷/g, "/");
+            try {
+                var result = eval(expression);
+                if (!isNaN(result)) {
+                    inputLabel.innerHTML = Number.isInteger(result) ? result : result.toFixed(2);
+                    // document.getElementById('calcutTitle').innerHTML = "Valid Expression";
+                } else {
+                    // document.getElementById('calcutTitle').innerHTML = "Invalid Expression";
+                    // inputLabel.innerHTML = inputLabel.innerHTML.slice(0, -1);
+                    inputLabel.innerHTML = "0";
+                    if(inputLabel.innerHTML == ""){
+                        inputLabel.innerHTML = 0;
+                        // document.getElementById('calcutTitle').innerHTML = "Valid Expression";
+                    }
+                }
+            } catch (error) {
+                // document.getElementById('calcutTitle').innerHTML = "Invalid Expression";
+                // inputLabel.innerHTML = inputLabel.innerHTML.slice(0, -1);
+                inputLabel.innerHTML = "0";
+                if(inputLabel.innerHTML == ""){
+                        inputLabel.innerHTML = 0;
+                        // document.getElementById('calcutTitle').innerHTML = "Valid Expression";
+                }
+            }
+        }
+        // Clearing label
+        else if (pushed == "C") {
+            inputLabel.innerHTML = '0';
+        }
+        // Clearing one character or each character
+        else if (pushed == "<i class=\"fas fa-backspace\"></i>") {
+            var expression = inputLabel.innerHTML;
+            var lastChar = expression[expression.length - 1];
+
+            if (lastChar == " ") {
+                inputLabel.innerHTML = expression.substring(0, expression.length - 3);
+            } else {
+                inputLabel.innerHTML = expression.substring(0, expression.length - 1);
+            }
+
+            if (inputLabel.innerHTML.trim() == "") {
+                inputLabel.innerHTML = '0';
+            }
+        }
+        else if (inputLabel.innerHTML == "0" && pushed == "-") {
+            inputLabel.innerHTML = "-";
+        }
+        // Adding operators and preventing consecutive operators
+        else {
+            if (pushed == "x" || pushed == "÷" || pushed == "+" || pushed == "-") {
+                var lastChar = inputLabel.innerHTML.trim().slice(-1);
+                if (lastChar != "" && lastChar != "x" && lastChar != "÷" && lastChar != "+" && lastChar != "-") {
+                    inputLabel.innerHTML += " " + pushed + " ";
+                }
+            } else {
+                if (inputLabel.innerHTML == "0" && pushed == "-") {
+                    inputLabel.innerHTML = "-";
+                } else if (inputLabel.innerHTML == "0") {
+                    inputLabel.innerHTML = pushed;
+                } else {
+                    inputLabel.innerHTML += pushed;
+                }
+            }
+        }
+    }
 
 </script>
 
